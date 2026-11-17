@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diferencias Nini</title>
+<meta name="theme-color" content="#002E9D">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root { --azul:#002E9D; --rojo:#E81911; --verde:#1E7B34; --ambar:#B26A00; --critico:#C62828; --gris:#f3f5f9; --borde:#d7dce6; --txt:#1F2937; --suave:#6b7280; --azul-claro:#eef2fb; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--gris); color:var(--txt); font-size:16px; }
+  header { background:#fff; border-bottom:3px solid var(--azul); padding:10px 16px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:5; }
+  header img { height:38px; }
+  header h1 { font-size:17px; margin:0; color:var(--azul); line-height:1.15; flex:1; min-width:0; }
+  header small { display:block; color:var(--suave); font-weight:400; font-size:12px; }
+  main { max-width:720px; margin:0 auto; padding:12px 16px 90px; }
+  .tabs { display:flex; gap:6px; margin:4px 0 12px; }
+  .tabs button { flex:1; padding:11px; border:1px solid var(--borde); background:#fff; border-radius:10px; font-size:15px; font-weight:600; color:var(--suave); }
+  .tabs button.on { background:var(--azul); color:#fff; border-color:var(--azul); }
+  .card { background:#fff; border:1px solid var(--borde); border-radius:12px; padding:14px; margin-bottom:12px; }
+  .card h2 { font-size:15px; margin:0 0 10px; color:var(--azul); text-transform:uppercase; letter-spacing:.03em; }
+  label { display:block; font-size:14px; font-weight:600; margin:10px 0 4px; }
+  label .opc { font-weight:400; color:var(--suave); }
+  input[type=text], input[type=number], input[type=tel], input[type=password], input[type=date], select, textarea {
+    width:100%; padding:11px 12px; border:1px solid var(--borde); border-radius:9px; font-size:16px; background:#fff; color:var(--txt); font-family:inherit; }
+  textarea { min-height:70px; resize:vertical; }
+  input:focus, select:focus, textarea:focus, button:focus-visible { outline:2px solid var(--azul); outline-offset:0; border-color:var(--azul); }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .nombre { margin-top:6px; font-size:14px; min-height:20px; }
+  .nombre.ok { color:var(--verde); font-weight:600; }
+  .nombre.err { color:var(--rojo); }
+  .seg { display:flex; gap:6px; flex-wrap:wrap; }
+  .seg button { flex:1 1 0; min-width:90px; padding:10px 6px; border:1px solid var(--borde); background:#fff; border-radius:9px; font-size:14px; font-weight:600; color:var(--txt); }
+  .seg button.sel { background:var(--azul); border-color:var(--azul); color:#fff; }
+  .prod { border:1px solid var(--borde); border-radius:10px; padding:10px 12px 12px; margin-bottom:10px; background:#fafbfd; }
+  .prod-head { display:flex; justify-content:space-between; align-items:center; }
+  .prod-head b { color:var(--azul); }
+  .quitar { background:none; border:none; color:var(--rojo); font-size:14px; padding:4px; }
+  .btn { display:block; width:100%; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:700; background:var(--azul); color:#fff; cursor:pointer; }
+  .btn:disabled { opacity:.5; }
+  .btn.sec { background:#fff; color:var(--azul); border:1px dashed var(--azul); font-weight:600; }
+  .btn.mt { margin-top:14px; }
+  .link { background:none; border:none; color:var(--azul); font-weight:600; font-size:14px; padding:8px 0; cursor:pointer; text-decoration:underline; }
+  .foto { border:1px dashed var(--borde); border-radius:10px; padding:10px; text-align:center; background:#fafbfd; }
+  .foto img { max-width:100%; max-height:200px; border-radius:6px; display:block; margin:8px auto 0; }
+  .foto input { width:100%; font-size:14px; }
+  #msg { display:none; padding:12px 14px; border-radius:10px; margin-bottom:12px; font-size:15px; }
+  #msg.ok { display:block; background:#e6f4ea; color:#14532d; border:1px solid #a7d7b5; }
+  #msg.err { display:block; background:#fdecec; color:#7f1d1d; border:1px solid #f3b4b4; }
+  .exito { text-align:center; padding:24px 14px; }
+  .exito .num { font-size:30px; font-weight:800; color:var(--azul); letter-spacing:.02em; margin:6px 0; }
+  .caso { border:1px solid var(--borde); border-radius:10px; padding:10px 12px; margin-bottom:8px; background:#fff; display:block; width:100%; text-align:left; font:inherit; color:inherit; }
+  button.caso { cursor:pointer; }
+  button.caso:hover { border-color:var(--azul); }
+  .caso.s-rojo { border-left:5px solid var(--critico); }
+  .caso.s-amarillo { border-left:5px solid var(--ambar); }
+  .caso.s-verde { border-left:5px solid var(--verde); }
+  .caso .top { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
+  .caso .id { font-weight:800; color:var(--azul); }
+  .caso .meta { color:var(--suave); font-size:13px; margin-top:3px; }
+  .caso .det { font-size:14px; margin-top:6px; }
+  .caso .cierre { margin-top:8px; padding:8px; background:#e6f4ea; border-radius:8px; font-size:14px; }
+  .badge { font-size:12px; font-weight:700; padding:3px 8px; border-radius:20px; white-space:nowrap; }
+  .b-abierto { background:#fff4e0; color:var(--ambar); }
+  .b-cerrado { background:#e6f4ea; color:var(--verde); }
+  .b-rojo { background:#fdecec; color:var(--critico); }
+  .b-amarillo { background:#fff4e0; color:var(--ambar); }
+  .b-verde { background:#e6f4ea; color:var(--verde); }
+  .b-info { background:var(--azul-claro); color:var(--azul); }
+  table.dat { width:100%; border-collapse:collapse; font-size:14px; }
+  table.dat td { padding:5px 4px; border-top:1px solid #eef0f4; vertical-align:top; }
+  table.dat td:first-child { color:var(--suave); width:42%; }
+  .tabla-scroll { overflow-x:auto; }
+  table.prods { width:100%; border-collapse:collapse; font-size:13px; margin-top:6px; }
+  table.prods th { text-align:left; background:var(--azul-claro); padding:5px; }
+  table.prods td { padding:5px; border-top:1px solid #eef0f4; }
+  .hidden { display:none !important; }
+  .nota { font-size:13px; color:var(--suave); margin-top:6px; }
+  .check { display:flex; align-items:center; gap:10px; padding:10px; border:1px solid var(--borde); border-radius:9px; margin-top:10px; font-weight:600; }
+  .check input { width:22px; height:22px; }
+  footer.fijo { position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid var(--borde); padding:10px 16px calc(10px + env(safe-area-inset-bottom)); }
+  footer.fijo .btn { max-width:688px; margin:0 auto; }
+  .usuario { display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:14px; margin-bottom:10px; flex-wrap:wrap; }
+  .usuario b { color:var(--azul); }
+  .grupo h3 { font-size:15px; margin:14px 0 8px; display:flex; align-items:center; gap:8px; }
+  .grupo h3 .cnt { background:var(--azul); color:#fff; border-radius:20px; padding:1px 9px; font-size:13px; }
+  .vacio { background:#fff; border:1px dashed var(--borde); border-radius:10px; padding:14px; color:var(--suave); font-size:14px; }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+  .chip { border:1px solid var(--borde); background:#fff; border-radius:20px; padding:6px 12px; font-size:13px; font-weight:600; cursor:pointer; color:var(--txt); font-variant-numeric:tabular-nums; }
+  .chip.on { background:var(--azul); color:#fff; border-color:var(--azul); }
+  .filtros { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .filtros > div { min-width:0; }
+  .filtros input, .filtros select { min-width:0; }
+  .filtros .full { grid-column:1 / -1; }
+  .filtros label { margin:0 0 3px; font-size:13px; }
+  .hist { list-style:none; padding:0; margin:0; font-size:14px; }
+  .hist li { padding:7px 0; border-top:1px solid #eef0f4; }
+  .hist li:first-child { border-top:none; }
+  .hist .f { color:var(--suave); font-size:12px; }
+  .acceso { text-align:center; margin-top:18px; }
+</style>
+</head>
+<body>
+<header>
+  <img src="logo-header.png" alt="Nini">
+  <h1>Expediente de diferencias<small id="subtitulo">Faltantes · Sobrantes · Producto cambiado</small></h1>
+</header>
+
+<main>
+  <div id="msg" role="status"></div>
+  <div id="cargando" class="card">Cargando…</div>
+
+  <!-- ================= CHOFER ================= -->
+  <section id="vChofer" class="hidden">
+    <div class="tabs">
+      <button id="tabNuevo" class="on" onclick="verTab('nuevo')">Nuevo aviso</button>
+      <button id="tabMis" onclick="verTab('mis')">Mis casos</button>
+    </div>
+
+    <div class="card">
+      <label for="legajo" style="margin-top:0">Tu legajo</label>
+      <input id="legajo" type="tel" inputmode="numeric" maxlength="8" placeholder="Ej: 1234" autocomplete="off">
+      <div id="nombre" class="nombre"></div>
+    </div>
+
+    <div id="pNuevo">
+      <div class="card">
+        <h2>Datos del viaje</h2>
+        <label>Sucursal</label>
+        <div class="seg" id="sucursal"></div>
+        <div class="row2">
+          <div><label for="tu">TU (n° de viaje)</label><input id="tu" type="text" inputmode="numeric" autocomplete="off"></div>
+          <div><label for="carro">N° de carro</label><input id="carro" type="text" inputmode="numeric" autocomplete="off"></div>
+        </div>
+        <label for="cliente">N° de cliente</label>
+        <input id="cliente" type="text" inputmode="numeric" autocomplete="off">
+      </div>
+
+      <div class="card">
+        <h2>Productos con diferencia</h2>
+        <div id="productos"></div>
+        <button class="btn sec" type="button" onclick="agregarProducto()">+ Agregar otro producto del mismo carro</button>
+      </div>
+
+      <div class="card">
+        <h2>Fotos</h2>
+        <label for="fPatente">Foto de la patente del contenedor</label>
+        <div class="foto">
+          <input id="fPatente" type="file" accept="image/*" capture="environment">
+          <img id="pvPatente" class="hidden" alt="Vista previa de la patente">
+        </div>
+        <label for="fMerca">Foto de la mercadería <span class="opc">(si es posible)</span></label>
+        <div class="foto">
+          <input id="fMerca" type="file" accept="image/*" capture="environment">
+          <img id="pvMerca" class="hidden" alt="Vista previa de la mercadería">
+        </div>
+      </div>
+
+      <div class="card">
+        <label for="obsChofer" style="margin-top:0">Observaciones <span class="opc">(opcional)</span></label>
+        <textarea id="obsChofer" maxlength="1000" placeholder="Breve explicación, si hace falta"></textarea>
+        <p class="nota">La fecha y la hora del aviso se registran automáticamente.</p>
+      </div>
+    </div>
+
+    <div id="pExito" class="card exito hidden">
+      <div>Aviso registrado. Tu número de caso es:</div>
+      <div class="num" id="numCaso"></div>
+      <p class="nota">El caso ya está en la bandeja de Inventario. Podés seguir el estado en <b>Mis casos</b>.</p>
+      <button class="btn" onclick="nuevoAviso()">Cargar otro aviso</button>
+    </div>
+
+    <div id="pMis" class="hidden"><div id="listaCasos"></div></div>
+
+    <div class="acceso"><button class="link" type="button" onclick="irPanel()">Ingreso de responsables (Inventario, IM, Consulta)</button></div>
+  </section>
+
+  <!-- ================= LOGIN RESPONSABLES ================= -->
+  <section id="vLogin" class="hidden">
+    <form class="card" id="formLogin" onsubmit="event.preventDefault(); entrar();">
+      <h2>Ingreso de responsables</h2>
+      <label for="lUsuario">Usuario</label>
+      <input id="lUsuario" type="text" autocomplete="username" autocapitalize="off" spellcheck="false">
+      <label for="lClave">Clave</label>
+      <input id="lClave" type="password" autocomplete="current-password">
+      <button class="btn mt" type="submit" id="btnLogin">Ingresar</button>
+    </form>
+    <div class="acceso"><button class="link" type="button" onclick="irChofer()">Volver a la pantalla del chofer</button></div>
+  </section>
+
+  <!-- ================= PANEL RESPONSABLES ================= -->
+  <section id="vPanel" class="hidden">
+    <div class="usuario"><span><b id="uNombre"></b> · <span id="uRol"></span></span><button class="link" type="button" onclick="salir()">Salir</button></div>
+    <div class="tabs" id="panelTabs">
+      <button id="tabPend" class="on" onclick="verPanelTab('pend')">Mis pendientes</button>
+      <button id="tabTodos" onclick="verPanelTab('todos')">Todos los casos</button>
+    </div>
+
+    <div id="pPend"></div>
+
+    <div id="pTodos" class="hidden">
+      <div class="chips" id="chips"></div>
+      <div class="card">
+        <div class="filtros">
+          <div class="full"><label for="fTexto">Buscar</label><input id="fTexto" type="text" placeholder="Caso, cliente, chofer, carro o producto" oninput="filtrar()"></div>
+          <div><label for="fSucursal">Sucursal</label><select id="fSucursal" onchange="filtrar()"></select></div>
+          <div><label for="fModo">Modo de cierre</label><select id="fModo" onchange="filtrar()"></select></div>
+          <div><label for="fDesde">Desde</label><input id="fDesde" type="date" onchange="filtrar()"></div>
+          <div><label for="fHasta">Hasta</label><input id="fHasta" type="date" onchange="filtrar()"></div>
+        </div>
+      </div>
+      <div id="listaTodos"></div>
+    </div>
+  </section>
+
+  <!-- ================= DETALLE DE UN CASO ================= -->
+  <section id="vDetalle" class="hidden">
+    <button class="link" type="button" onclick="volverPanel()">← Volver</button>
+    <div class="card">
+      <div class="caso" style="border:none;padding:0;margin:0">
+        <div class="top"><span class="id" id="eId" style="font-size:22px"></span><span id="eEstado" class="badge"></span></div>
+      </div>
+      <table class="dat" id="eDatos" style="margin-top:8px"></table>
+      <div class="tabla-scroll"><table class="prods" id="eProds"></table></div>
+    </div>
+    <div id="eEtapas"></div>
+
+    <form id="fInventario" class="card hidden" onsubmit="event.preventDefault(); guardar('inventario');">
+      <h2>Intervención de Inventario</h2>
+      <label class="check"><input type="checkbox" id="invSin" onchange="toggleSin()"> Sin intervención de control</label>
+      <div id="invCon">
+        <label for="invC1">Intervención 1° control · apellido y nombre</label>
+        <input id="invC1" type="text">
+        <label for="invC2">Intervención 2° control · apellido y nombre <span class="opc">(si hubo)</span></label>
+        <input id="invC2" type="text">
+        <label for="invTipo">Tipo de intervención</label>
+        <select id="invTipo"></select>
+      </div>
+      <label for="invObs">Observaciones <span class="opc">(opcional)</span></label>
+      <textarea id="invObs" maxlength="1000"></textarea>
+      <button class="btn mt" type="submit">Guardar intervención</button>
+    </form>
+
+    <form id="fIngreso" class="card hidden" onsubmit="event.preventDefault(); guardar('ingreso');">
+      <h2>Ingreso al sistema</h2>
+      <p class="nota" style="margin-top:0">El Supervisor de IM encontró la mercadería in situ. Ingresala al sistema y a la posición correspondiente, y marcalo acá.</p>
+      <label for="ingObs">Observaciones <span class="opc">(opcional)</span></label>
+      <textarea id="ingObs" maxlength="1000"></textarea>
+      <button class="btn mt" type="submit">Marcar como ingresada al sistema</button>
+    </form>
+
+    <form id="fVerif" class="card hidden" onsubmit="event.preventDefault(); guardar('verificacion');">
+      <h2>Verificación Supervisor de IM</h2>
+      <label>Mercadería in situ</label>
+      <div class="seg" id="imInsitu">
+        <button type="button" data-v="SI" onclick="selInsitu(this)">Sí</button>
+        <button type="button" data-v="NO" onclick="selInsitu(this)">No</button>
+      </div>
+      <div id="imSiBox" class="hidden">
+        <p class="nota" style="color:#1e3a8a;background:var(--azul-claro);padding:8px;border-radius:8px">El caso pasa a la bandeja de Inventario para que ingresen la mercadería al sistema. Comunicate igual con Inventario.</p>
+        <label for="imPos">Posición / ubicación donde está <span class="opc">(opcional)</span></label>
+        <input id="imPos" type="text">
+      </div>
+      <label for="imObs">Observaciones <span class="opc">(opcional)</span></label>
+      <textarea id="imObs" maxlength="1000"></textarea>
+      <button class="btn mt" type="submit">Guardar verificación</button>
+    </form>
+
+    <form id="fCierre" class="card hidden" onsubmit="event.preventDefault(); guardar('cierre');">
+      <h2>Cierre del caso</h2>
+      <label for="ciModo">Modo de cierre</label>
+      <select id="ciModo"></select>
+      <label for="ciDec">Decisión final</label>
+      <textarea id="ciDec" maxlength="1000" placeholder="Detalle de la decisión que se informa a RRHH, Finanzas, Ismael y Germán"></textarea>
+      <p class="nota">Al cerrar se envía la decisión por mail y el chofer ve el cierre en “Mis casos”.</p>
+      <button class="btn mt" type="submit">Cerrar caso</button>
+    </form>
+
+    <div class="card" id="eHistCard"><h2>Historial</h2><ul class="hist" id="eHist"></ul></div>
+  </section>
+</main>
+
+<footer class="fijo hidden" id="pie"><button class="btn" id="btnEnviar" onclick="enviarAviso()">Enviar aviso</button></footer>
+
+<script>
+// URL de la aplicación web de Apps Script (termina en /exec)
+const API_URL = 'https://script.google.com/macros/s/AKfycbyPTznaflUasrDAMnZQfHpvdnGxilKwz2roPMc7e1nWt618-kpe7znfhL6hBT8Dn7GI/exec';
+
+let qs = new URLSearchParams(location.search);
+let CFG = null, LISTAS = null, SES = null, CASO = null, ACCION = null, TODOS = [], filtroEstado = '';
+let st = { persona: null, sucursal: '', fotoPatente: '', fotoMerca: '', insitu: '', exito: false };
+let tab = 'nuevo', panelTab = 'pend', enviando = false, ultimoLegajo = null;
+
+// ---------- utilidades ----------
+const $ = id => document.getElementById(id);
+function msg(t, tipo) { const m = $('msg'); m.textContent = t || ''; m.className = t ? tipo : ''; if (t) window.scrollTo(0, 0); }
+function getLS(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+function setLS(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function getSS(k) { try { return sessionStorage.getItem(k) || ''; } catch (e) { return ''; } }
+function setSS(k, v) { try { v ? sessionStorage.setItem(k, v) : sessionStorage.removeItem(k); } catch (e) {} }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function show(id, on) { $(id).classList.toggle('hidden', !on); }
+const VISTAS = ['vChofer', 'vLogin', 'vPanel', 'vDetalle'];
+function vista(id) { VISTAS.forEach(v => show(v, v === id)); show('pie', id === 'vChofer' && tab === 'nuevo' && !st.exito); show('cargando', false); }
+
+async function apiGet(params) {
+  const r = await fetch(API_URL + '?' + new URLSearchParams(params).toString());
+  return r.json();
+}
+async function apiPost(data) {
+  const r = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) });
+  return r.json();
+}
+async function apiSes(data) {
+  const r = await apiPost(Object.assign({ t: SES && SES.t }, data));
+  if (r && r.sesion === false) { SES = null; setSS('dif_ses', ''); irPanel(); msg(r.error, 'err'); return null; }
+  return r;
+}
+
+function comprimir(file, max = 1280, q = 0.72) {
+  return new Promise((ok, mal) => {
+    const fr = new FileReader();
+    fr.onerror = mal;
+    fr.onload = () => {
+      const img = new Image();
+      img.onerror = mal;
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > max || h > max) { const s = max / Math.max(w, h); w = Math.round(w * s); h = Math.round(h * s); }
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        ok(c.toDataURL('image/jpeg', q));
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+
+// ---------- arranque ----------
+async function iniciar() {
+  if (API_URL.includes('PEGAR_AQUI')) { show('cargando', false); msg('Falta configurar la URL de la aplicación (API_URL).', 'err'); return; }
+  try {
+    if (qs.has('panel')) { await irPanel(); return; }
+    await iniciarChofer();
+  } catch (e) {
+    show('cargando', false);
+    msg('No se pudo cargar. Revisá la conexión y recargá la página.', 'err');
+  }
+}
+
+// =============== CHOFER ===============
+let choferListo = false;
+async function iniciarChofer() {
+  $('subtitulo').textContent = 'Faltantes · Sobrantes · Producto cambiado';
+  if (!choferListo) {
+    CFG = await apiGet({ action: 'config' });
+    if (!CFG.ok) { msg(CFG.error, 'err'); return; }
+    const L = CFG.listas;
+    $('sucursal').innerHTML = L['Sucursales'].map(s => `<button type="button" data-v="${esc(s)}">${esc(s)}</button>`).join('');
+    $('sucursal').querySelectorAll('button').forEach(b => b.onclick = () => { st.sucursal = b.dataset.v; setLS('dif_sucursal', st.sucursal); marcarSeg('sucursal', st.sucursal); });
+    const suc = getLS('dif_sucursal');
+    if (L['Sucursales'].includes(suc)) { st.sucursal = suc; marcarSeg('sucursal', suc); }
+    agregarProducto();
+    $('fPatente').onchange = e => cargarFoto(e, 'fotoPatente', 'pvPatente');
+    $('fMerca').onchange = e => cargarFoto(e, 'fotoMerca', 'pvMerca');
+    $('legajo').addEventListener('change', buscarLegajo);
+    $('legajo').addEventListener('blur', buscarLegajo);
+    $('legajo').value = getLS('dif_legajo');
+    choferListo = true;
+  }
+  vista('vChofer');
+  if ($('legajo').value) { ultimoLegajo = null; buscarLegajo(); }
+}
+function irChofer() { msg(''); qs = new URLSearchParams(''); iniciarChofer(); window.scrollTo(0, 0); }
+
+function marcarSeg(cont, v) { $(cont).querySelectorAll('button').forEach(b => b.classList.toggle('sel', b.dataset.v === v)); }
+
+async function buscarLegajo() {
+  const l = $('legajo').value.trim();
+  if (l === ultimoLegajo) return;
+  ultimoLegajo = l;
+  st.persona = null;
+  const n = $('nombre');
+  if (!l) { n.textContent = ''; n.className = 'nombre'; return; }
+  if (!/^\d{1,8}$/.test(l)) { n.textContent = 'El legajo es numérico.'; n.className = 'nombre err'; return; }
+  n.textContent = 'Buscando…'; n.className = 'nombre';
+  try {
+    const r = await apiGet({ action: 'persona', legajo: l });
+    if ($('legajo').value.trim() !== l) return;
+    if (r.ok) {
+      st.persona = { legajo: l, nombre: r.nombre };
+      n.textContent = '✓ ' + r.nombre; n.className = 'nombre ok';
+      setLS('dif_legajo', l);
+      if (r.sede && !st.sucursal && CFG.listas['Sucursales'].includes(r.sede)) { st.sucursal = r.sede; marcarSeg('sucursal', r.sede); }
+      if (tab === 'mis') cargarMisCasos();
+    } else { n.textContent = r.error; n.className = 'nombre err'; }
+  } catch (e) { n.textContent = 'No se pudo verificar el legajo (conexión).'; n.className = 'nombre err'; ultimoLegajo = null; }
+}
+
+function verTab(t) {
+  tab = t;
+  $('tabNuevo').classList.toggle('on', t === 'nuevo');
+  $('tabMis').classList.toggle('on', t === 'mis');
+  show('pNuevo', t === 'nuevo' && !st.exito);
+  show('pExito', t === 'nuevo' && st.exito);
+  show('pie', t === 'nuevo' && !st.exito);
+  show('pMis', t === 'mis');
+  msg('');
+  if (t === 'mis') cargarMisCasos();
+}
+
+async function cargarMisCasos() {
+  const box = $('listaCasos');
+  if (!st.persona) { box.innerHTML = '<div class="vacio">Ingresá tu legajo para ver tus casos.</div>'; return; }
+  box.innerHTML = '<div class="vacio">Buscando tus casos…</div>';
+  try {
+    const r = await apiGet({ action: 'misCasos', legajo: st.persona.legajo });
+    if (!r.ok) { box.innerHTML = `<div class="vacio">${esc(r.error)}</div>`; return; }
+    if (!r.casos.length) { box.innerHTML = '<div class="vacio">No tenés casos cargados.</div>'; return; }
+    box.innerHTML = r.casos.map(c => {
+      const cerrado = c.estado === 'Cerrado';
+      return `<div class="caso">
+        <div class="top"><span class="id">${esc(c.caso)}</span><span class="badge ${cerrado ? 'b-cerrado' : 'b-abierto'}">${cerrado ? 'Cerrado' : 'En curso'}</span></div>
+        <div class="meta">${esc(c.fecha)} · TU ${esc(c.tu)} · Carro ${esc(c.carro)} · Cliente ${esc(c.cliente)}</div>
+        <div class="det">${esc(c.detalle)}</div>
+        ${cerrado ? `<div class="cierre"><b>Cierre ${esc(c.fechaCierre)}:</b> ${esc(c.modoCierre)}</div>` : `<div class="meta">Estado: ${esc(c.estado)}</div>`}
+      </div>`;
+    }).join('');
+  } catch (e) { box.innerHTML = '<div class="vacio">No se pudieron cargar los casos (conexión).</div>'; }
+}
+
+let prodSeq = 0;
+function agregarProducto() {
+  const max = (CFG && CFG.maxProductos) || 30;
+  if ($('productos').children.length >= max) { msg('Máximo ' + max + ' productos por aviso.', 'err'); return; }
+  const L = CFG.listas, id = ++prodSeq;
+  const div = document.createElement('div');
+  div.className = 'prod'; div.dataset.id = id;
+  div.innerHTML = `
+    <div class="prod-head"><b class="pnum"></b><button type="button" class="quitar" onclick="quitarProducto(${id})">Quitar</button></div>
+    <label>Tipo de diferencia</label>
+    <div class="seg ptipo">${L['Tipo de diferencia'].map(t => `<button type="button" data-v="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+    <div class="row2">
+      <div><label>Código <span class="opc">(si lo tenés)</span></label><input type="text" class="pcod" autocomplete="off"></div>
+      <div><label>Cantidad</label><input type="number" class="pcant" inputmode="decimal" min="0" step="any"></div>
+    </div>
+    <label>Descripción del producto</label><input type="text" class="pdesc" autocomplete="off">
+    <label>Unidad de medida</label>
+    <div class="seg punid">${L['Unidad de medida'].map(t => `<button type="button" data-v="${esc(t)}">${esc(t)}</button>`).join('')}</div>`;
+  div.querySelectorAll('.seg').forEach(seg => seg.querySelectorAll('button').forEach(b => b.onclick = () => {
+    seg.querySelectorAll('button').forEach(x => x.classList.toggle('sel', x === b)); seg.dataset.v = b.dataset.v;
+  }));
+  $('productos').appendChild(div);
+  numerarProductos();
+}
+function quitarProducto(id) {
+  if ($('productos').children.length <= 1) { msg('Tiene que haber al menos un producto.', 'err'); return; }
+  const el = $('productos').querySelector(`.prod[data-id="${id}"]`);
+  if (el) el.remove();
+  numerarProductos();
+}
+function numerarProductos() {
+  const items = [...$('productos').children];
+  items.forEach((p, i) => { p.querySelector('.pnum').textContent = 'Producto ' + (i + 1); p.querySelector('.quitar').style.visibility = items.length > 1 ? 'visible' : 'hidden'; });
+}
+function leerProductos() {
+  return [...$('productos').children].map(p => ({
+    tipo: p.querySelector('.ptipo').dataset.v || '',
+    codigo: p.querySelector('.pcod').value.trim(),
+    descripcion: p.querySelector('.pdesc').value.trim(),
+    unidad: p.querySelector('.punid').dataset.v || '',
+    cantidad: p.querySelector('.pcant').value.trim()
+  }));
+}
+
+async function cargarFoto(e, campo, preview) {
+  const f = e.target.files[0];
+  st[campo] = '';
+  show(preview, false);
+  if (!f) return;
+  try {
+    st[campo] = await comprimir(f);
+    $(preview).src = st[campo]; show(preview, true);
+  } catch (err) { msg('No se pudo leer la foto. Probá sacarla de nuevo.', 'err'); }
+}
+
+function validarAviso(d) {
+  if (!st.persona) return 'Ingresá tu legajo y esperá que aparezca tu nombre.';
+  if (!d.sucursal) return 'Elegí la sucursal.';
+  if (!d.tu) return 'Falta el número de TU (viaje).';
+  if (!d.carro) return 'Falta el número de carro.';
+  if (!d.cliente) return 'Falta el número de cliente.';
+  for (let i = 0; i < d.productos.length; i++) {
+    const p = d.productos[i], n = 'Producto ' + (i + 1) + ': ';
+    if (!p.tipo) return n + 'elegí faltante, sobrante o producto cambiado.';
+    if (!p.descripcion) return n + 'falta la descripción.';
+    if (!p.unidad) return n + 'elegí la unidad de medida.';
+    if (!(Number(String(p.cantidad).replace(',', '.')) > 0)) return n + 'la cantidad tiene que ser mayor a cero.';
+  }
+  if (!d.fotoPatente) return 'Falta la foto de la patente del contenedor.';
+  return null;
+}
+
+async function enviarAviso() {
+  const d = {
+    action: 'aviso', legajo: st.persona ? st.persona.legajo : '', sucursal: st.sucursal,
+    tu: $('tu').value.trim(), carro: $('carro').value.trim(), cliente: $('cliente').value.trim(),
+    productos: leerProductos(), fotoPatente: st.fotoPatente, fotoMercaderia: st.fotoMerca,
+    observaciones: $('obsChofer').value.trim()
+  };
+  const err = validarAviso(d);
+  if (err) { msg(err, 'err'); return; }
+  if (enviando) return;
+  enviando = true;
+  const b = $('btnEnviar'); b.disabled = true; b.textContent = 'Enviando aviso…';
+  let r = null;
+  try { r = await apiPost(d); } catch (e) { msg('Error al enviar. Revisá la conexión e intentá de nuevo.', 'err'); }
+  enviando = false; b.disabled = false; b.textContent = 'Enviar aviso';
+  if (!r) return;
+  if (!r.ok) { msg(r.error, 'err'); return; }
+  msg('');
+  $('numCaso').textContent = r.caso;
+  st.exito = true;
+  show('pNuevo', false); show('pie', false); show('pExito', true);
+  window.scrollTo(0, 0);
+}
+
+function nuevoAviso() {
+  ['tu', 'carro', 'cliente', 'obsChofer'].forEach(i => $(i).value = '');
+  $('fPatente').value = ''; $('fMerca').value = '';
+  st.fotoPatente = ''; st.fotoMerca = ''; st.exito = false;
+  show('pvPatente', false); show('pvMerca', false);
+  $('productos').innerHTML = ''; agregarProducto();
+  show('pExito', false); show('pNuevo', true); show('pie', true);
+  window.scrollTo(0, 0);
+}
+
+// =============== RESPONSABLES ===============
+async function irPanel() {
+  $('subtitulo').textContent = 'Responsables';
+  if (!SES) { try { SES = JSON.parse(getSS('dif_ses') || 'null'); } catch (e) { SES = null; } }
+  if (!SES) { vista('vLogin'); setTimeout(() => $('lUsuario').focus(), 50); return; }
+  await abrirPanel();
+}
+
+async function entrar() {
+  const u = $('lUsuario').value.trim(), c = $('lClave').value;
+  if (!u || !c) { msg('Completá usuario y clave.', 'err'); return; }
+  const b = $('btnLogin'); b.disabled = true; b.textContent = 'Ingresando…';
+  let r = null;
+  try { r = await apiPost({ action: 'login', usuario: u, clave: c }); } catch (e) { msg('Error de conexión.', 'err'); }
+  b.disabled = false; b.textContent = 'Ingresar';
+  if (!r) return;
+  if (!r.ok) { msg(r.error, 'err'); return; }
+  msg('');
+  $('lClave').value = '';
+  SES = { t: r.t, nombre: r.nombre, rol: r.rol, listas: r.listas };
+  setSS('dif_ses', JSON.stringify(SES));
+  await abrirPanel();
+}
+
+async function salir() {
+  try { await apiPost({ action: 'salir', t: SES && SES.t }); } catch (e) {}
+  SES = null; setSS('dif_ses', '');
+  msg('Sesión cerrada.', 'ok');
+  vista('vLogin');
+}
+
+async function abrirPanel() {
+  LISTAS = SES.listas;
+  $('uNombre').textContent = SES.nombre;
+  $('uRol').textContent = SES.rol;
+  const consulta = SES.rol === 'Consulta';
+  show('tabPend', !consulta);
+  if (consulta) panelTab = 'todos';
+  vista('vPanel');
+  await verPanelTab(panelTab);
+}
+
+async function verPanelTab(t) {
+  panelTab = t;
+  $('tabPend').classList.toggle('on', t === 'pend');
+  $('tabTodos').classList.toggle('on', t === 'todos');
+  show('pPend', t === 'pend'); show('pTodos', t === 'todos');
+  if (t === 'pend') await cargarBandeja(); else await cargarTodos();
+}
+
+function semaforoTxt(c) {
+  if (c.dias === null || c.dias === undefined || !c.semaforo) return '';
+  const t = c.dias === 0 ? 'Hoy' : c.dias === 1 ? '1 día' : c.dias + ' días';
+  return `<span class="badge b-${c.semaforo}">${t}</span>`;
+}
+function tarjeta(c, mostrarEstado) {
+  const cerrado = c.estado === 'Cerrado';
+  return `<button type="button" class="caso ${c.semaforo ? 's-' + c.semaforo : ''}" onclick="abrirCaso('${esc(c.caso)}')">
+    <div class="top"><span class="id">${esc(c.caso)}</span><span style="display:flex;gap:6px;flex-wrap:wrap">${mostrarEstado ? `<span class="badge ${cerrado ? 'b-cerrado' : 'b-info'}">${esc(c.estado)}</span>` : ''}${c.ingresoPendiente && mostrarEstado ? '<span class="badge b-abierto">Ingreso pendiente</span>' : ''}${semaforoTxt(c)}</span></div>
+    <div class="meta">${esc(c.fecha)} · ${esc(c.sucursal)} · Cliente ${esc(c.cliente)} · Carro ${esc(c.carro)}</div>
+    <div class="meta">Chofer: ${esc(c.chofer)}</div>
+    <div class="det">${esc(c.detalle)}</div>
+    ${cerrado && c.modoCierre ? `<div class="cierre">${esc(c.modoCierre)}</div>` : ''}
+  </button>`;
+}
+
+async function cargarBandeja() {
+  const box = $('pPend');
+  box.innerHTML = '<div class="vacio">Cargando tu bandeja…</div>';
+  let r;
+  try { r = await apiSes({ action: 'bandeja' }); } catch (e) { box.innerHTML = '<div class="vacio">No se pudo cargar (conexión).</div>'; return; }
+  if (!r) return;
+  if (!r.ok) { box.innerHTML = `<div class="vacio">${esc(r.error)}</div>`; return; }
+  box.innerHTML = r.grupos.map(g => `<div class="grupo"><h3>${esc(g.titulo)} <span class="cnt">${g.casos.length}</span></h3>
+    ${g.casos.length ? g.casos.map(c => tarjeta(c, false)).join('') : `<div class="vacio">${esc(g.vacio)}</div>`}</div>`).join('');
+}
+
+async function cargarTodos() {
+  $('listaTodos').innerHTML = '<div class="vacio">Cargando casos…</div>';
+  let r;
+  try { r = await apiSes({ action: 'casos' }); } catch (e) { $('listaTodos').innerHTML = '<div class="vacio">No se pudo cargar (conexión).</div>'; return; }
+  if (!r) return;
+  if (!r.ok) { $('listaTodos').innerHTML = `<div class="vacio">${esc(r.error)}</div>`; return; }
+  TODOS = r.casos;
+  const opts = (arr, todos) => `<option value="">${todos}</option>` + arr.map(x => `<option>${esc(x)}</option>`).join('');
+  const s = $('fSucursal').value, m = $('fModo').value;
+  $('fSucursal').innerHTML = opts(LISTAS['Sucursales'], 'Todas'); $('fSucursal').value = s;
+  $('fModo').innerHTML = opts(LISTAS['Modos de cierre'], 'Todos'); $('fModo').value = m;
+  filtrar();
+}
+
+const ESTADOS = ['Pendiente Inventario', 'Pendiente verificación IM', 'Pendiente de cierre', 'Cerrado'];
+function filtrar() {
+  const txt = $('fTexto').value.trim().toLowerCase();
+  const suc = $('fSucursal').value, modo = $('fModo').value, desde = $('fDesde').value, hasta = $('fHasta').value;
+  const base = TODOS.filter(c => {
+    if (suc && c.sucursal !== suc) return false;
+    if (modo && c.modoCierre !== modo) return false;
+    const dia = c.fechaISO ? new Date(c.fechaISO).toLocaleDateString('sv-SE', { timeZone: 'America/Argentina/Buenos_Aires' }) : '';
+    if (desde && dia < desde) return false;
+    if (hasta && dia > hasta) return false;
+    if (txt && ![c.caso, c.cliente, c.chofer, c.carro, c.tu, c.detalle].join(' ').toLowerCase().includes(txt)) return false;
+    return true;
+  });
+  const cuenta = e => base.filter(c => c.estado === e).length;
+  const rojos = base.filter(c => c.semaforo === 'rojo' && c.estado !== 'Cerrado').length;
+  const chip = (v, t, n) => `<button type="button" class="chip ${filtroEstado === v ? 'on' : ''}" onclick="filtroEstado='${v}';filtrar()">${t} · ${n}</button>`;
+  $('chips').innerHTML = chip('', 'Todos', base.length) +
+    chip('Pendiente Inventario', 'Inventario', cuenta('Pendiente Inventario')) +
+    chip('Pendiente verificación IM', 'Verificación IM', cuenta('Pendiente verificación IM')) +
+    chip('Pendiente de cierre', 'Para cerrar', cuenta('Pendiente de cierre')) +
+    chip('Cerrado', 'Cerrados', cuenta('Cerrado')) +
+    chip('rojo', 'Atrasados', rojos);
+  const lista = base.filter(c => !filtroEstado || (filtroEstado === 'rojo' ? c.semaforo === 'rojo' && c.estado !== 'Cerrado' : c.estado === filtroEstado));
+  $('listaTodos').innerHTML = lista.length ? lista.slice(0, 200).map(c => tarjeta(c, true)).join('') +
+    (lista.length > 200 ? `<p class="nota">Se muestran los 200 más recientes de ${lista.length}. Usá los filtros para acotar.</p>` : '')
+    : '<div class="vacio">No hay casos con esos filtros.</div>';
+}
+
+async function abrirCaso(id) {
+  msg('');
+  let r;
+  try { r = await apiSes({ action: 'detalle', caso: id }); } catch (e) { msg('No se pudo abrir el caso (conexión).', 'err'); return; }
+  if (!r) return;
+  if (!r.ok) { msg(r.error, 'err'); return; }
+  CASO = r.caso; ACCION = r.accion;
+  pintarCaso(r.productos, r.historial);
+  ['fInventario', 'fIngreso', 'fVerif', 'fCierre'].forEach(f => show(f, false));
+  const form = { inventario: 'fInventario', ingreso: 'fIngreso', verificacion: 'fVerif', cierre: 'fCierre' }[ACCION];
+  if (form) {
+    $(form).reset();
+    st.insitu = ''; marcarSeg('imInsitu', ''); show('imSiBox', false); show('invCon', true);
+    if (ACCION === 'inventario') llenarSelect('invTipo', LISTAS['Tipo de intervención']);
+    if (ACCION === 'cierre') llenarSelect('ciModo', LISTAS['Modos de cierre']);
+    show(form, true);
+  }
+  vista('vDetalle');
+  window.scrollTo(0, 0);
+}
+
+function volverPanel() { msg(''); vista('vPanel'); verPanelTab(panelTab); }
+
+function llenarSelect(id, arr) { $(id).innerHTML = '<option value="">Elegí una opción</option>' + arr.map(x => `<option>${esc(x)}</option>`).join(''); }
+
+function pintarCaso(prods, hist) {
+  const c = CASO, cerrado = c['Estado'] === 'Cerrado';
+  $('eId').textContent = c['Caso'];
+  $('eEstado').textContent = c['Estado'];
+  $('eEstado').className = 'badge ' + (cerrado ? 'b-cerrado' : 'b-info');
+  const fila = (k, v) => v ? `<tr><td>${esc(k)}</td><td>${v}</td></tr>` : '';
+  const foto = u => u ? `<a href="${esc(u)}" target="_blank" rel="noopener">Ver foto</a>` : '';
+  $('eDatos').innerHTML =
+    fila('Fecha aviso', esc(c['Fecha aviso'])) + fila('Sucursal', esc(c['Sucursal'])) +
+    fila('Chofer', esc(c['Legajo chofer'] + ' - ' + c['Chofer'])) + fila('TU (viaje)', esc(c['TU (viaje)'])) +
+    fila('Carro', esc(c['Carro'])) + fila('Cliente', esc(c['Cliente'])) +
+    fila('Foto patente', foto(c['Foto patente'])) + fila('Foto mercadería', foto(c['Foto mercadería'])) +
+    fila('Observaciones', esc(c['Observaciones chofer']));
+  $('eProds').innerHTML = '<tr><th>#</th><th>Tipo</th><th>Producto</th><th>Cant.</th></tr>' +
+    prods.map(p => `<tr><td>${esc(p.n)}</td><td>${esc(p.tipo)}</td><td>${p.codigo ? esc(p.codigo) + ' · ' : ''}${esc(p.descripcion)}</td><td>${esc(p.cantidad)} ${esc(p.unidad)}</td></tr>`).join('');
+  let h = '';
+  if (c['Fecha intervención']) {
+    h += `<div class="card"><h2>Inventario</h2><table class="dat">` +
+      fila('Fecha', esc(c['Fecha intervención'])) + fila('Completó', esc(c['Responsable Inventario'])) +
+      fila('Intervención', esc(c['Intervención'])) + fila('Control 1', esc(c['Control 1'])) + fila('Control 2', esc(c['Control 2'])) +
+      fila('Tipo', esc(c['Tipo de intervención'])) + fila('Observaciones', esc(c['Obs. Inventario'])) + '</table></div>';
+  }
+  if (c['Fecha verificación IM']) {
+    h += `<div class="card"><h2>Verificación IM</h2><table class="dat">` +
+      fila('Fecha', esc(c['Fecha verificación IM'])) + fila('Supervisor', esc(c['Supervisor IM'])) +
+      fila('Mercadería in situ', '<b>' + esc(c['Mercadería in situ']) + '</b>') + fila('Posición', esc(c['Posición / ubicación'])) +
+      fila('Observaciones', esc(c['Obs. verificación IM'])) +
+      fila('Ingresada al sistema', c['Fecha ingreso al sistema'] ? esc(c['Fecha ingreso al sistema'] + ' - ' + c['Ingresado por']) : (c['Mercadería in situ'] === 'Sí' ? '<span class="badge b-abierto">Pendiente</span>' : '')) +
+      '</table></div>';
+  }
+  if (c['Fecha cierre']) {
+    h += `<div class="card"><h2>Cierre</h2><table class="dat">` +
+      fila('Fecha', esc(c['Fecha cierre'])) + fila('Cerrado por', esc(c['Cerrado por'])) +
+      fila('Modo de cierre', '<b>' + esc(c['Modo de cierre']) + '</b>') + fila('Decisión final', esc(c['Decisión final'])) + '</table></div>';
+  }
+  $('eEtapas').innerHTML = h;
+  $('eHist').innerHTML = hist.map(x => `<li><div class="f">${esc(x.fecha)} · ${esc(x.etapa)} · ${esc(x.usuario)}</div>${esc(x.detalle)}</li>`).join('');
+}
+
+function toggleSin() { show('invCon', !$('invSin').checked); }
+function selInsitu(b) { st.insitu = b.dataset.v; marcarSeg('imInsitu', st.insitu); show('imSiBox', st.insitu === 'SI'); }
+
+async function guardar(accion) {
+  const d = { action: accion, caso: CASO['Caso'] };
+  let err = null;
+  if (accion === 'inventario') {
+    Object.assign(d, { sinIntervencion: $('invSin').checked, control1: $('invC1').value.trim(), control2: $('invC2').value.trim(), tipo: $('invTipo').value, observaciones: $('invObs').value.trim() });
+    if (!d.sinIntervencion && !d.control1) err = 'Completá el 1° control o marcá "Sin intervención de control".';
+    else if (!d.sinIntervencion && !d.tipo) err = 'Elegí el tipo de intervención.';
+  } else if (accion === 'ingreso') {
+    d.observaciones = $('ingObs').value.trim();
+  } else if (accion === 'verificacion') {
+    Object.assign(d, { insitu: st.insitu, posicion: $('imPos').value.trim(), observaciones: $('imObs').value.trim() });
+    if (!d.insitu) err = 'Indicá si la mercadería está in situ.';
+  } else if (accion === 'cierre') {
+    Object.assign(d, { modo: $('ciModo').value, decision: $('ciDec').value.trim() });
+    if (!d.modo) err = 'Elegí el modo de cierre.';
+    else if (!d.decision) err = 'Describí la decisión final.';
+  }
+  if (err) { msg(err, 'err'); return; }
+  if (enviando) return;
+  enviando = true;
+  const btn = document.querySelector('#vDetalle form:not(.hidden) .btn');
+  const orig = btn.textContent; btn.disabled = true; btn.textContent = 'Guardando…';
+  let r = null;
+  try { r = await apiSes(d); } catch (e) { msg('Error al guardar. Revisá la conexión e intentá de nuevo.', 'err'); }
+  enviando = false; btn.disabled = false; btn.textContent = orig;
+  if (!r) return;
+  if (!r.ok) { msg(r.error, 'err'); return; }
+  const textos = {
+    inventario: 'Intervención guardada. El caso pasó a la bandeja del Supervisor de IM.',
+    ingreso: 'Listo. La mercadería quedó registrada como ingresada al sistema.',
+    verificacion: 'Verificación guardada. Ya podés cargar el cierre del caso.',
+    cierre: 'Caso cerrado. Se informó la decisión y el chofer lo ve en “Mis casos”.'
+  };
+  const id = CASO['Caso'];
+  if (accion === 'verificacion') { await abrirCaso(id); msg(textos[accion], 'ok'); }
+  else { volverPanel(); msg(textos[accion], 'ok'); }
+}
+
+iniciar();
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
