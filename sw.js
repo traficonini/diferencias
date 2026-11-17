@@ -1,6 +1,6 @@
 // Service worker mínimo: guarda la pantalla para que abra rápido.
 // Los datos siempre van a la red (nunca se cachean las respuestas de Apps Script).
-const CACHE = 'expediente-diferencias-v1';
+const CACHE = 'expediente-diferencias-v2';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './logo-header.png'];
 
 self.addEventListener('install', e => {
